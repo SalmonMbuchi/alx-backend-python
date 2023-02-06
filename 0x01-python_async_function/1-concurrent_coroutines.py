@@ -8,6 +8,7 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 
 async def wait_n(n: int, max_delay: int) -> list:
+    """returns a list of delays"""
     myList = []
     for i in range(n):
         num = await wait_random(max_delay)
