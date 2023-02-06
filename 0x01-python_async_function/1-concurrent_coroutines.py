@@ -2,8 +2,8 @@
 """Execute multiple coroutines"""
 
 # import wait_random from './0-basic_async_syntax.py'
-import random
-import asyncio
+# import random
+# import asyncio
 wait_random = __import__('0-basic_async_syntax').wait_random
 
 
