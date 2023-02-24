@@ -35,10 +35,10 @@ class TestGetJson(unittest.TestCase):
         with patch('requests.get') as mock:
             # mock = Mock(return_value=test_payload) 
             #mock.json = Mock(return_value=test_payload)
-            mock.json = test_payload
+            mock.json.return_value = test_payload 
             mock.get(test_url)
             mock.get.assert_called_once()
-            self.assertEqual(get_json(test_url), test_payload)
+            self.assertEqual(get_json(test_url), mock.get.json())
 
 
 if __name__ == '__main__':
