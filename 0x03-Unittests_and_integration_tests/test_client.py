@@ -42,9 +42,9 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_pb_url.assert_called_once()
 
     @parameterized.expand([
-        param({"license": {"key": "my_license"}}, "my_license", True),
-        param({"license": {"key": "other_license"}}, "my_license", False)])
-    def test_has_licence(self, map, key, expected):
+        param(repo={"license": {"key": "my_license"}}, license_key="my_license", res=True),
+        param(repo={"license": {"key": "other_license"}}, license_key="my_license", res=False)])
+    def test_has_licence(self, repo, license_key, res):
         """Tests has_license"""
-        self.assertEqual(goc.has_license(map, key), expected)
-        self.assertEqual(goc.has_license(map, key), expected)
+        self.assertEqual(goc.has_license(repo, license_key), res)
+        self.assertEqual(goc.has_license(repo, license_key), res)
