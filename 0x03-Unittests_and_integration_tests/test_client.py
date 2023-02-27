@@ -33,13 +33,38 @@ class TestGithubOrgClient(unittest.TestCase):
     @patch('client.get_json')
     def test_public_repos(self, mock_get_json: MagicMock) -> None:
         """Test public_repos"""
-        resp = {'name': 'abc.github.io'}
-        mock_get_json.return_value = MagicMock(return_value=resp)
+        test_payload = {
+            'repos_url': 'https://api/github/abc/users/repos',
+            'repos': [
+                {
+                    "id": 116722761,
+                    "node_id": "MDEwOlJlcG9zaXRvcnkxMTY3MjI3NjE=",
+                    "name": "abc.github.io",
+                    "full_name": "abc/abc.github.io",
+                    "owner": {
+                      "login": "abc",
+                      "id": 3063240,
+                    }
+                },
+                {
+                    "id": 440222033,
+                    "node_id": "R_kgDOGj1BUQ",
+                    "name": "advent-of-code-2021",
+                    "full_name": "abc/advent-of-code-2021",
+                    "owner": {
+                      "login": "abc",
+                      "id": 3063240,
+                    }
+                }
+            ]
+        }
+        mock_get_json.return_value = test_payload['repos']
         with patch.object(goc, '_public_repos_url',
                           new_callable=PropertyMock) as mock_pb_url:
-            mock_pb_url.return_value = 'https://api/github/abc/users/repos'
-            self.assertEqual(goc("abc").public_repos(), [])
+            mock_pb_url.return_value = test_payload['repos_url'] 
+            self.assertEqual(goc("abc").public_repos(), ["abc.github.io", "advent-of-code-2021"])
             mock_pb_url.assert_called_once()
+        mock_get_json.assert_called_once()
 
     @parameterized.expand([
         param(repo={"license": {"key": "my_license"}}, license_key="my_license", res=True),
