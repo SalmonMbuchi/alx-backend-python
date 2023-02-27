@@ -63,8 +63,9 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.return_value = test_payload['repos']
         with patch.object(goc, '_public_repos_url',
                           new_callable=PropertyMock) as mock_pb_url:
-            mock_pb_url.return_value = test_payload['repos_url'] 
-            self.assertEqual(goc("abc").public_repos(), ["abc.github.io", "advent-of-code-2021"])
+            mock_pb_url.return_value = test_payload['repos_url']
+            self.assertEqual(goc("abc").public_repos(),
+                             ["abc.github.io", "advent-of-code-2021"])
             mock_pb_url.assert_called_once()
         mock_get_json.assert_called_once()
 
@@ -73,7 +74,7 @@ class TestGithubOrgClient(unittest.TestCase):
         ({"license": {"key": "other_license"}}, "my_license", False)])
     def test_has_licence(self, repo, license_key, res):
         """Tests has_license"""
-        client = goc("abc")
+        client = goc("google")
         has_license = client.has_license(repo, license_key)
         self.assertEqual(has_license, res)
 
@@ -83,16 +84,17 @@ class TestGithubOrgClient(unittest.TestCase):
     'repos_payload': TEST_PAYLOAD[0][1],
     'expected_repos': TEST_PAYLOAD[0][2],
     'apache2_repos': TEST_PAYLOAD[0][3],
-    }])     
+    }])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration test for public_repos function"""
     @classmethod
     def setupClass(cls):
-        """set up fixtures""" 
+        """set up fixtures"""
         route_payload = {
             'https://api.github.com/orgs/google': cls.org_payload,
             'https://api.github.com/orgs/google/repos': cls.repos_payload
         }
+
         def get_payload(url):
             if url in route_payload:
                 return Mock(**{'json.return_value': route_payload[url]})
