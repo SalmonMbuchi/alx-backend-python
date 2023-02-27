@@ -49,4 +49,3 @@ class TestGithubOrgClient(unittest.TestCase):
         client = goc("abc")
         has_license = client.has_license(repo, license_key)
         self.assertEqual(has_license, res)
-        self.assertEqual(has_license, res)
