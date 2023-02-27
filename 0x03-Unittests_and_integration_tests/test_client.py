@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Test module for GithubOrgClient class"""
 import unittest
-from parameterized import parameterized
+from parameterized import parameterized, param
 from unittest.mock import (MagicMock, PropertyMock, patch)
 from client import GithubOrgClient as goc
 from typing import Dict
@@ -35,16 +35,16 @@ class TestGithubOrgClient(unittest.TestCase):
         """Test public_repos"""
         resp = {'name': 'abc.github.io'}
         mock_get_json.return_value = MagicMock(return_value=resp)
-        with patch.object(goc, '_public_repos_url', new_callable=PropertyMock) as mock_pb_url:
+        with patch.object(goc, '_public_repos_url',
+                          new_callable=PropertyMock) as mock_pb_url:
             mock_pb_url.return_value = 'https://api/github/abc/users/repos'
             self.assertEqual(goc("abc").public_repos(), [])
             mock_pb_url.assert_called_once()
 
-    
     @parameterized.expand([
-        ({"license": {"key": "my_license"}}, "my_license", True),
-        ({"license": {"key": "other_license"}}, "my_license", False)])
+        param({"license": {"key": "my_license"}}, "my_license", True),
+        param({"license": {"key": "other_license"}}, "my_license", False)])
     def test_has_licence(self, map, key, expected):
         """Tests has_license"""
-        self.assertEqual(goc.has_license(map, key), expected) 
-        self.assertEqual(goc.has_license(map, key), expected) 
+        self.assertEqual(goc.has_license(map, key), expected)
+        self.assertEqual(goc.has_license(map, key), expected)
