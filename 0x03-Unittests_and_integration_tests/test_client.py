@@ -29,3 +29,22 @@ class TestGithubOrgClient(unittest.TestCase):
             mock_org.return_value = resp
             self.assertEqual(goc("abc")._public_repos_url,
                              "https://api/github/abc/users/repos")
+
+    @patch('client.get_json')
+    def test_public_repos(self, mock_get_json: MagicMock) -> None:
+        """Test public_repos"""
+        resp = {'name': 'abc.github.io'}
+        mock_get_json.return_value = MagicMock(return_value=resp)
+        with patch.object(goc, '_public_repos_url', new_callable=PropertyMock) as mock_pb_url:
+            mock_pb_url.return_value = 'https://api/github/abc/users/repos'
+            self.assertEqual(goc("abc").public_repos(), resp['name'])
+            mock_pb_url.assert_called_once()
+
+    
+    @parameterized.expand([
+        ({"license": {"key": "my_license"}}, "my_license", True),
+        ({"license": {"key": "other_license"}}, "my_license", False)])
+    def test_has_licence(self, map, key, expected):
+        """Tests has_license"""
+        self.assertEqual(goc.has_license(map, key), expected) 
+        self.assertEqual(goc.has_license(map, key), expected) 
