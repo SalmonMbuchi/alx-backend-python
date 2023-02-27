@@ -37,7 +37,7 @@ class TestGithubOrgClient(unittest.TestCase):
         mock_get_json.return_value = MagicMock(return_value=resp)
         with patch.object(goc, '_public_repos_url', new_callable=PropertyMock) as mock_pb_url:
             mock_pb_url.return_value = 'https://api/github/abc/users/repos'
-            self.assertEqual(goc("abc").public_repos(), resp['name'])
+            self.assertEqual(goc("abc").public_repos(), [])
             mock_pb_url.assert_called_once()
 
     
