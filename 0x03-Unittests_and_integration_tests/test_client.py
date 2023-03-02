@@ -72,7 +72,7 @@ class TestGithubOrgClient(unittest.TestCase):
     @parameterized.expand([
         ({"license": {"key": "my_license"}}, "my_license", True),
         ({"license": {"key": "other_license"}}, "my_license", False)])
-    def test_has_licence(self, repo, license_key, res):
+    def test_has_license(self, repo, license_key, res):
         """Tests has_license"""
         client = goc("google")
         has_license = client.has_license(repo, license_key)
@@ -88,7 +88,7 @@ class TestGithubOrgClient(unittest.TestCase):
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration test for public_repos function"""
     @classmethod
-    def setupClass(cls):
+    def setUpClass(cls):
         """set up fixtures"""
         route_payload = {
             'https://api.github.com/orgs/google': cls.org_payload,
@@ -107,7 +107,7 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         """Test public_repos function"""
         self.assertEqual(goc("google").public_repos(), self.expected_repos)
 
-    def test_public_repos_has_license(self) -> None:
+    def test_public_repos_with_license(self) -> None:
         """Tests the public_repos function with a license"""
         self.assertEqual(goc("google").public_repos(license="apache-2.0"),
                          self.apache2_repos)
